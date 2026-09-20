@@ -33,6 +33,12 @@ defmodule JobSite.Vacancies do
   end
 
   @doc """
+  Gets a job vacancy.
+  """
+  @spec get_job_vacancy(String.t()) :: vacancy() | nil
+  def get_job_vacancy(id), do: Repo.get_by(Vacancy, id: id)
+
+  @doc """
   Lists job vacancies on the admin side of the site.
   """
   @spec list_vacancies_for_admin :: [vacancy()]
