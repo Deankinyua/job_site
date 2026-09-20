@@ -1,3 +1,5 @@
+JobSiteWeb
+
 defmodule JobSite.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
@@ -15,6 +17,8 @@ defmodule JobSite.DataCase do
   """
 
   use ExUnit.CaseTemplate
+
+  alias Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
@@ -36,8 +40,8 @@ defmodule JobSite.DataCase do
   Sets up the sandbox based on the test tags.
   """
   def setup_sandbox(tags) do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(JobSite.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+    pid = Sandbox.start_owner!(JobSite.Repo, shared: not tags[:async])
+    on_exit(fn -> Sandbox.stop_owner(pid) end)
   end
 
   @doc """
