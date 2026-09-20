@@ -3,7 +3,7 @@ defmodule JobSite.Vacancies do
   The Vacancies context
   """
 
-  # alias JobSite.Repo
+  alias JobSite.Repo
   alias JobSite.Vacancies.Vacancy
 
   @type attrs :: map()
@@ -28,5 +28,21 @@ defmodule JobSite.Vacancies do
   @spec change_compensation(vacancy(), attrs()) :: changeset()
   def change_compensation(application, attrs \\ %{}) do
     Vacancy.compensation_changeset(application, attrs)
+  end
+
+  @doc """
+  Saves a job vacancy as it moves through each step/page.
+  """
+  @spec save_job_vacancy(changeset()) :: {:ok, vacancy()} | {:error, changeset()}
+  def save_job_vacancy(changeset), do: Repo.insert_or_update(changeset)
+
+  @doc """
+  Publishes a job vacancy. Checks if all fields are present.
+  """
+  @spec publish_job_vacancy(vacancy(), attrs()) :: {:ok, vacancy()} | {:error, changeset()}
+  def publish_job_vacancy(vacancy, attrs \\ %{}) do
+    vacancy
+    |> Vacancy.submit_changeset(attrs)
+    |> Repo.update()
   end
 end
