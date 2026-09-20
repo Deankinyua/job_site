@@ -20,6 +20,12 @@ defmodule JobSiteWeb.Router do
     get "/", PageController, :home
   end
 
+  scope "/admin", JobSiteWeb do
+    pipe_through :browser
+
+    live "/jobs", Admin.JobsLive.Index, :home
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", JobSiteWeb do
   #   pipe_through :api
