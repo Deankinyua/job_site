@@ -3,6 +3,8 @@ defmodule JobSite.Vacancies do
   The Vacancies context
   """
 
+  import Ecto.Query, only: [order_by: 3, where: 3]
+
   alias JobSite.Repo
   alias JobSite.Vacancies.Vacancy
 
@@ -28,6 +30,27 @@ defmodule JobSite.Vacancies do
   @spec change_compensation(vacancy(), attrs()) :: changeset()
   def change_compensation(application, attrs \\ %{}) do
     Vacancy.compensation_changeset(application, attrs)
+  end
+
+  @doc """
+  Lists job vacancies on the admin side of the site.
+  """
+  @spec list_vacancies_for_admin :: [vacancy()]
+  def list_vacancies_for_admin do
+    Vacancy
+    |> order_by([vacancy], desc: vacancy.inserted_at)
+    |> Repo.all()
+  end
+
+  @doc """
+  Lists job vacancies for the public-facing side of the site.
+  """
+  @spec list_published_vacancies :: [vacancy()]
+  def list_published_vacancies do
+    Vacancy
+    |> where([vacancy], vacancy.status == :published)
+    |> order_by([vacancy], desc: vacancy.inserted_at)
+    |> Repo.all()
   end
 
   @doc """
