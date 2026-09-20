@@ -9,7 +9,7 @@ defmodule JobSite.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps(),
+      deps: ne3ko_deps() ++ phoenix_deps(),
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       listeners: [Phoenix.CodeReloader]
     ]
@@ -27,7 +27,10 @@ defmodule JobSite.MixProject do
 
   def cli do
     [
-      preferred_envs: [precommit: :test]
+      default_task: "phx.server",
+      preferred_envs: [
+        ci: :test
+      ]
     ]
   end
 
@@ -35,10 +38,16 @@ defmodule JobSite.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
+  defp ne3ko_deps do
+    [
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+    ]
+  end
+
   # Specifies your project dependencies.
   #
   # Type `mix help deps` for examples and options.
-  defp deps do
+  defp phoenix_deps do
     [
       {:phoenix, "~> 1.8.5"},
       {:phoenix_ecto, "~> 4.5"},
@@ -88,7 +97,15 @@ defmodule JobSite.MixProject do
         "esbuild job_site --minify",
         "phx.digest"
       ],
-      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
+      ci: [
+        "deps.unlock --check-unused",
+        "format --check-formatted",
+        "cmd npx prettier -c .",
+        "credo --strict",
+        "test --warnings-as-errors"
+      ],
+      credo: ["credo --strict"],
+      prettier: ["cmd npx prettier -w ."]
     ]
   end
 end
