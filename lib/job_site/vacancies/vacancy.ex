@@ -118,8 +118,8 @@ defmodule JobSite.Vacancies.Vacancy do
     ])
   end
 
-  @spec work_arrangements_changeset(t(), map()) :: changeset()
-  def work_arrangements_changeset(vacancy, attrs) do
+  @spec work_arrangement_changeset(t(), map()) :: changeset()
+  def work_arrangement_changeset(vacancy, attrs) do
     vacancy
     |> changeset(attrs)
     |> validate_required([:work_arrangement, :working_hours, :workplace_location])
