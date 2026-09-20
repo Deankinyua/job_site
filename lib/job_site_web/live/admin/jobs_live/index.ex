@@ -2,6 +2,8 @@ defmodule JobSiteWeb.Admin.JobsLive.Index do
   use JobSiteWeb, :live_view
 
   alias JobSite.Vacancies
+  alias JobSiteWeb.Admin.JobsLive.FormComponent
+  alias JobSiteWeb.Admin.JobsLive.JobVacancyComponents
 
   @impl Phoenix.LiveView
   def render(assigns) do
@@ -10,6 +12,22 @@ defmodule JobSiteWeb.Admin.JobsLive.Index do
       flash={@flash}
       active_tab={:jobs}
     >
+      <JobVacancyComponents.jobs
+        :if={@live_action == :index}
+        vacancies_empty?={@vacancies_empty?}
+        vacancies={@streams.job_vacancies}
+      />
+
+      <div class="flex flex-col items-center">
+        <.live_component
+          :if={@live_action in [:new, :edit]}
+          module={FormComponent}
+          id="job-vacancy-form"
+          vacancy={@vacancy}
+          action={@action}
+          step_name={@step_name}
+        />
+      </div>
     </Layouts.app>
     """
   end

@@ -23,9 +23,12 @@ defmodule JobSiteWeb.Router do
   scope "/admin", JobSiteWeb do
     pipe_through :browser
 
-    live "/home", Admin.HomeLive.Index, :home
-    live "/applications", Admin.ApplicationsLive.Index, :home
-    live "/jobs", Admin.JobsLive.Index, :home
+    live "/home", Admin.HomeLive.Index, :index
+    live "/applications", Admin.ApplicationsLive.Index, :index
+
+    live "/jobs", Admin.JobsLive.Index, :index
+    live "/jobs/new", Admin.JobsLive.Index, :new
+    live "/jobs/:id/edit", Admin.JobsLive.Index, :index
   end
 
   # Other scopes may use custom stacks.
