@@ -11,5 +11,14 @@ defmodule JobSite.Employers.Company do
     field :company_size, :string
     field :headquarters, :string
     field :name, :string
+
+    timestamps(type: :utc_datetime)
+  end
+
+  @spec changeset(t(), map()) :: changeset()
+  def changeset(company, attrs) do
+    company
+    |> cast(attrs, [:company_size, :headquarters, :name])
+    |> validate_required([:company_size, :headquarters, :name])
   end
 end
