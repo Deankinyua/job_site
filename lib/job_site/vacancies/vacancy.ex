@@ -31,6 +31,25 @@ defmodule JobSite.Vacancies.Vacancy do
     :published
   ]
 
+  @vacancy_fields [
+    :application_deadline,
+    :employment_type,
+    :experience_level,
+    :job_title,
+    :number_of_positions,
+    :company_id,
+    :job_summary,
+    :job_description,
+    :minimum_qualifications,
+    :required_skills,
+    :work_arrangement,
+    :working_hours,
+    :workplace_location,
+    :currency,
+    :maximum_salary,
+    :minimum_salary
+  ]
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "vacancies" do
@@ -66,4 +85,64 @@ defmodule JobSite.Vacancies.Vacancy do
 
     timestamps(type: :utc_datetime)
   end
+
+  # We never cast the :status
+  @spec changeset(t(), map()) :: changeset()
+  def changeset(vacancy, attrs) do
+    cast(vacancy, attrs, @vacancy_fields)
+  end
+
+  @spec vacancy_details_changeset(t(), map()) :: changeset()
+  def vacancy_details_changeset(vacancy, attrs) do
+    vacancy
+    |> changeset(attrs)
+    |> validate_required([
+      :application_deadline,
+      :company_id,
+      :employment_type,
+      :experience_level,
+      :job_title,
+      :number_of_positions
+    ])
+  end
+
+  @spec job_description_changeset(t(), map()) :: changeset()
+  def job_description_changeset(vacancy, attrs) do
+    vacancy
+    |> changeset(attrs)
+    |> validate_required([
+      :job_description,
+      :job_summary,
+      :minimum_qualifications,
+      :required_skills
+    ])
+  end
+
+  @spec work_arrangements_changeset(t(), map()) :: changeset()
+  def work_arrangements_changeset(vacancy, attrs) do
+    vacancy
+    |> changeset(attrs)
+    |> validate_required([:work_arrangement, :working_hours, :workplace_location])
+  end
+
+  @spec compensation_changeset(t(), map()) :: changeset()
+  def compensation_changeset(vacancy, attrs) do
+    vacancy
+    |> changeset(attrs)
+    |> validate_required([:currency, :maximum_salary, :minimum_salary])
+  end
+
+  @spec submit_changeset(t(), map()) :: changeset()
+  def submit_changeset(application, attrs) do
+    application
+    |> changeset(attrs)
+    |> validate_required(@vacancy_fields)
+    |> maybe_submit_application()
+  end
+
+  defp maybe_submit_application(changeset) when changeset.valid? == true,
+    do: put_change(changeset, :status, :published)
+
+  defp maybe_submit_application(changeset),
+    do: changeset
 end
