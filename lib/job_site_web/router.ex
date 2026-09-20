@@ -23,6 +23,8 @@ defmodule JobSiteWeb.Router do
   scope "/admin", JobSiteWeb do
     pipe_through :browser
 
+    live "/home", Admin.HomeLive.Index, :home
+    live "/applications", Admin.ApplicationsLive.Index, :home
     live "/jobs", Admin.JobsLive.Index, :home
   end
 
