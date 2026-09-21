@@ -2,7 +2,12 @@ defmodule JobSiteWeb.Admin.JobsLive.FormComponent do
   use JobSiteWeb, :live_component
 
   alias JobSite.Vacancies.Vacancy
+  alias JobSiteWeb.Admin.JobsLive.CompensationComponent
+  alias JobSiteWeb.Admin.JobsLive.JobDescriptionComponent
   alias JobSiteWeb.Admin.JobsLive.JobVacancyComponents
+  alias JobSiteWeb.Admin.JobsLive.ReviewSubmitComponent
+  alias JobSiteWeb.Admin.JobsLive.VacancyDetailsComponent
+  alias JobSiteWeb.Admin.JobsLive.WorkArrangementComponent
   alias JobSiteWeb.Step
 
   @impl Phoenix.LiveComponent
