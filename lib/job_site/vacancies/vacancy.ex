@@ -68,7 +68,7 @@ defmodule JobSite.Vacancies.Vacancy do
     field :minimum_qualifications, {:array, :string}, default: []
     field :required_skills, {:array, :string}, default: []
 
-    # Step 3: Work arrangements
+    # Step 3: Work arrangement
     field :work_arrangement, Ecto.Enum, values: @work_arrangements
     field :working_hours, :string
     field :workplace_location, :string
