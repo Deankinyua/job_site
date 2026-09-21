@@ -28,7 +28,7 @@ defmodule JobSiteWeb.Router do
 
     live "/jobs", Admin.JobsLive.Index, :index
     live "/jobs/new", Admin.JobsLive.Index, :new
-    live "/jobs/:id/edit", Admin.JobsLive.Index, :index
+    live "/jobs/:id/edit", Admin.JobsLive.Index, :edit
   end
 
   # Other scopes may use custom stacks.

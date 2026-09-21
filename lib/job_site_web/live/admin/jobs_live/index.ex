@@ -42,13 +42,27 @@ defmodule JobSiteWeb.Admin.JobsLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :edit, %{"id" => id, "section" => section}) do
-    vacancy = Vacancies.get_job_vacancy(id)
+  @impl Phoenix.LiveView
+  def handle_info({:second_step, vacancy, current_step}, socket) do
+    {:noreply,
+     socket
+     |> put_flash(:info, "Saved")
+     |> push_navigate(to: ~p"/admin/jobs/#{vacancy.id}/edit?section=#{current_step.next}")}
+  end
 
+  def handle_info({:next_step, vacancy, current_step}, socket) do
+    {:noreply,
+     socket
+     |> assign(:vacancy, vacancy)
+     |> put_flash(:info, "Saved")
+     |> push_patch(to: ~p"/admin/jobs/#{vacancy.id}/edit?section=#{current_step.next}")}
+  end
+
+  defp apply_action(socket, :edit, %{"id" => id, "section" => section}) do
     socket
     |> assign(:page_title, "Edit Job Vacancy")
     |> assign(:step_name, section)
-    |> assign(:vacancy, vacancy)
+    |> assign_new(:vacancy, fn -> Vacancies.get_job_vacancy(id) end)
   end
 
   defp apply_action(socket, :new, _params) do
