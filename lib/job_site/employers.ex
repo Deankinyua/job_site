@@ -21,6 +21,8 @@ defmodule JobSite.Employers do
     |> Repo.insert()
   end
 
+  def list_companies, do: Repo.all(Company)
+
   @spec get_company_by_name(company_name()) :: company() | nil
   def get_company_by_name(name), do: Repo.get_by(Company, name: name)
 end

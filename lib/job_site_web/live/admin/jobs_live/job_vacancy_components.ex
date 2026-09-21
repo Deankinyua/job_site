@@ -60,6 +60,16 @@ defmodule JobSiteWeb.Admin.JobsLive.JobVacancyComponents do
     <section id="job-vacancies-list" class="w-full py-8">
       <h1 class="text-3xl font-bold tracking-tight text-slate-900">Job vacancies</h1>
 
+      <div class="flex justify-end">
+        <.link
+          id="new-job-vacancy"
+          patch={~p"/admin/jobs/new"}
+          class="inline-flex mt-10 items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-950"
+        >
+          <.icon name="hero-plus" class="size-5" /> New Job Vacancy
+        </.link>
+      </div>
+
       <div
         :if={@vacancies_empty?}
         id="job-vacancies-empty"

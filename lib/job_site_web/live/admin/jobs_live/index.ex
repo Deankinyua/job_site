@@ -24,7 +24,7 @@ defmodule JobSiteWeb.Admin.JobsLive.Index do
           module={FormComponent}
           id="job-vacancy-form"
           vacancy={@vacancy}
-          action={@action}
+          action={@live_action}
           step_name={@step_name}
         />
       </div>
@@ -55,7 +55,7 @@ defmodule JobSiteWeb.Admin.JobsLive.Index do
     socket
     |> assign(:vacancy, nil)
     |> assign(:page_title, "New Job Vacancy")
-    |> assign(:step_name, "applicant_details")
+    |> assign(:step_name, "vacancy_details")
   end
 
   defp apply_action(socket, :index, _params) do

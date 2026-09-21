@@ -111,4 +111,17 @@ defmodule JobSiteWeb do
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end
+
+  defmodule VacancyFormHelpers do
+    @moduledoc """
+    Defines common configuration for all schemas
+    """
+
+    defmacro __using__(_opts) do
+      quote do
+        alias JobSite.Vacancies
+        alias JobSiteWeb.Admin.JobsLive.JobVacancyComponents
+      end
+    end
+  end
 end
