@@ -138,6 +138,37 @@ defmodule JobSiteWeb.Admin.JobsLive.JobVacancyComponents do
     """
   end
 
+  attr :id, :string, required: true
+  attr :previous_page_url, :string, required: true
+
+  @spec back_button(assigns()) :: rendered()
+  def back_button(assigns) do
+    ~H"""
+    <.link
+      id={@id}
+      patch={@previous_page_url}
+      class="rounded-lg border border-slate-800 bg-slate-800 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-slate-700 hover:bg-slate-700"
+    >
+      Back
+    </.link>
+    """
+  end
+
+  attr :id, :string, required: true
+
+  @spec next_button(assigns()) :: rendered()
+  def next_button(assigns) do
+    ~H"""
+    <button
+      id={@id}
+      type="submit"
+      class="rounded-lg bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:cursor-pointer hover:bg-slate-800"
+    >
+      Next
+    </button>
+    """
+  end
+
   defp vacancy_label(nil), do: "Not specified"
 
   defp vacancy_label(value) do
