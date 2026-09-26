@@ -194,5 +194,5 @@ defmodule JobSiteWeb.Admin.JobsLive.JobVacancyComponents do
   defp job_page_url, do: ~p"/admin/jobs/"
 
   defp edit_url(vacancy_id),
-    do: job_page_url() <> "#{vacancy_id}/edit?section=applicant_details"
+    do: job_page_url() <> "#{vacancy_id}/edit?section=vacancy_details"
 end
