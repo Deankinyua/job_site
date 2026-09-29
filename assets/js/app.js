@@ -24,9 +24,11 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 import ArrayInputHooks from "./hooks/array_input";
+import ScrollIntoViewHooks from "./hooks/scroll_into_view";
 
 let Hooks = {
   ...ArrayInputHooks,
+  ...ScrollIntoViewHooks,
 };
 
 const csrfToken = document

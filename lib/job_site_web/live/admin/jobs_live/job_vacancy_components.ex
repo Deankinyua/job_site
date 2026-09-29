@@ -16,35 +16,60 @@ defmodule JobSiteWeb.Admin.JobsLive.JobVacancyComponents do
     assigns =
       assign(assigns,
         titles: Enum.map(assigns.steps, &step_title(&1.name)),
-        current_step:
+        current_step_number:
           (Enum.find_index(assigns.steps, &(&1.name == assigns.current_step.name)) ||
              0) +
             1
       )
 
     ~H"""
-    <nav id="job-vacancy-stepper" aria-label="Form progress" class="overflow-x-auto py-4">
-      <ol class="flex items-center gap-3">
+    <nav
+      id={"grant-application-stepper-#{@current_step.name}"}
+      phx-hook="ScrollIntoView"
+      aria-label="Form progress"
+      class="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4"
+    >
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-2 px-1">
+        <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
+          Create a vacancy
+        </p>
+        <p class="text-xs font-medium text-indigo-700">
+          Step {@current_step_number} of {length(@titles)}
+        </p>
+      </div>
+      <ol class="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-5">
         <li
           :for={{title, step_number} <- Enum.with_index(@titles, 1)}
           id={"job-vacancy-step-#{step_number}"}
-          aria-current={if step_number == @current_step, do: "step"}
-          class="flex shrink-0 items-center gap-3"
+          aria-current={if step_number == @current_step_number, do: "step"}
+          class={[
+            "flex min-w-0 items-center gap-3 rounded-xl border p-3 transition-colors duration-200 sm:flex-col sm:gap-2 sm:px-2 sm:py-4 sm:text-center",
+            step_number < @current_step_number && "border-teal-100 bg-teal-50 text-teal-800",
+            step_number == @current_step_number &&
+              "border-indigo-200 bg-indigo-50 text-indigo-950 ring-1 ring-indigo-200",
+            step_number > @current_step_number && "border-slate-100 bg-slate-50 text-slate-500"
+          ]}
         >
-          <div class={[
-            "flex items-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium",
-            step_number < @current_step && "border-black bg-black text-white",
-            step_number == @current_step && "border-slate-400 bg-white text-slate-900",
-            step_number > @current_step && "border-slate-200 bg-slate-50 text-slate-500"
-          ]}>
-            <span>{step_number}.</span>
-            <span>{title}</span>
-          </div>
-          <.icon
-            :if={step_number < length(@titles)}
-            name="hero-arrow-right"
-            class="size-4 shrink-0 text-slate-400"
-          />
+          <span
+            aria-hidden="true"
+            class={[
+              "flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
+              step_number < @current_step_number && "bg-teal-600 text-white",
+              step_number == @current_step_number && "bg-indigo-600 text-white shadow-sm",
+              step_number > @current_step_number && "bg-slate-200 text-slate-500"
+            ]}
+          >
+            <%= if step_number < @current_step_number do %>
+              <.icon name="hero-check" class="size-4" />
+            <% else %>
+              {step_number}
+            <% end %>
+          </span>
+          <span class="min-w-0 break-words text-sm font-semibold leading-5 sm:w-full sm:text-xs">
+            <span class="sr-only">Step {step_number}: </span>
+            {title}
+            <span :if={step_number < @current_step_number} class="sr-only"> (completed)</span>
+          </span>
         </li>
       </ol>
     </nav>
