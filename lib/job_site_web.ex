@@ -119,7 +119,6 @@ defmodule JobSiteWeb do
 
     defmacro __using__(_opts) do
       quote do
-        alias JobSite.Employers
         alias JobSite.Vacancies
         alias JobSiteWeb.Admin.JobsLive.Helpers
         alias JobSiteWeb.Admin.JobsLive.JobVacancyComponents
