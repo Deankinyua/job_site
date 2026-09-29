@@ -166,7 +166,7 @@ defmodule JobSiteWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file month number password
-               search select tel text textarea time url week hidden)
+               search select tel text textarea time url week hidden array)
 
   attr :field, FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -274,6 +274,71 @@ defmodule JobSiteWeb.CoreComponents do
     """
   end
 
+  def input(%{type: "array"} = assigns) do
+    assigns = assign(assigns, :array_values, Enum.with_index(assigns.value, 1))
+
+    ~H"""
+    <div class="fieldset mb-2">
+      <label for={@id}>
+        <span :if={@label} class="label mb-1">{@label}</span>
+
+        <div class="flex items-center gap-2">
+          <input
+            type="text"
+            name={"#{@name}-add-input"}
+            id={@id}
+            phx-hook="ArrayInput"
+            class={[
+              @class || "w-full input",
+              @errors != [] && (@error_class || "input-error")
+            ]}
+            {@rest}
+          />
+
+          <button
+            type="button"
+            id={"#{@id}_add_button"}
+            class="rounded-lg bg-slate-700 px-4 py-2 font-medium text-white transition hover:cursor-pointer hover:bg-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Add
+          </button>
+        </div>
+      </label>
+      <.error :for={msg <- @errors}>{msg}</.error>
+
+      <ol
+        id={"#{@id}_list_container"}
+        class="mt-3 space-y-2 empty:mt-0 [&>li]:flex [&>li]:items-center [&>li]:justify-between [&>li]:gap-3 [&>li]:rounded-xl [&>li]:border [&>li]:border-slate-200 [&>li]:bg-slate-50 [&>li]:py-2 [&>li]:pl-4 [&>li]:pr-2 [&>li]:transition-colors [&>li:hover]:border-slate-300 [&>li>span]:min-w-0 [&>li>span]:text-sm [&>li>span]:font-medium [&>li>span]:text-slate-700 [&>li>span]:[overflow-wrap:anywhere] [&>li>button]:shrink-0 [&>li>button]:rounded-lg [&>li>button]:px-3 [&>li>button]:py-2 [&>li>button]:text-xs [&>li>button]:font-semibold [&>li>button]:text-slate-500 [&>li>button]:transition-colors [&>li>button:hover]:bg-rose-50 [&>li>button:hover]:text-rose-700 [&>li>button:focus-visible]:outline-2 [&>li>button:focus-visible]:outline-offset-2 [&>li>button:focus-visible]:outline-rose-500"
+      >
+        <li
+          :for={{value, index} <- @array_values}
+          data-number={index}
+          id={"#{@id}_list_item_#{index}"}
+          class="flex justify-between"
+        >
+          <span>{value}</span>
+          <input
+            type="hidden"
+            name={@name}
+            id={"#{@id}-#{index}"}
+            value={value}
+          />
+
+          <button
+            type="button"
+            id={"#{@id}_list_item_#{index}_remove_btn"}
+            data-number={index}
+            class="text-blue-400 hover:cursor-pointer"
+            phx-click={JS.dispatch("remove-item", to: "##{@id}_list_item_#{index}_remove_btn")}
+          >
+            Remove
+          </button>
+        </li>
+      </ol>
+    </div>
+    """
+  end
+
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
@@ -295,6 +360,27 @@ defmodule JobSiteWeb.CoreComponents do
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
+  end
+
+  @doc """
+  Generate an array input element for submitting multiple strings.
+  """
+  attr :id, :any
+  attr :name, :any
+  attr :label, :string, default: nil
+  attr :field, Phoenix.HTML.FormField
+  attr :required, :boolean, default: false
+  attr :options, :list
+  attr :rest, :global, include: ~w(disabled form readonly)
+  attr :class, :string, default: nil
+
+  def array_input(assigns) do
+    new_assigns =
+      assigns
+      |> assign(:multiple, true)
+      |> assign(:type, "array")
+
+    input(new_assigns)
   end
 
   # Helper used by inputs to generate form errors
