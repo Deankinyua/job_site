@@ -90,6 +90,9 @@ defmodule JobSiteWeb.Admin.JobsLive.FormComponent do
     ]
   end
 
-  defp find_step(name),
-    do: Enum.find(form_steps(), &(&1.name == name))
+  defp find_step(name) do
+    [first_step | _other_steps] = steps = form_steps()
+
+    Enum.find(steps, first_step, &(&1.name == name))
+  end
 end
