@@ -47,7 +47,7 @@ defmodule JobSiteWeb.Admin.JobsLive.Index do
     {:noreply,
      socket
      |> put_flash(:info, "Saved")
-     |> push_navigate(to: ~p"/admin/jobs/#{vacancy.id}/edit?section=#{current_step.next}")}
+     |> push_navigate(to: ~p"/admin/jobs/#{vacancy.id}/edit?page=#{current_step.next}")}
   end
 
   def handle_info({:next_step, vacancy, current_step}, socket) do
@@ -55,13 +55,13 @@ defmodule JobSiteWeb.Admin.JobsLive.Index do
      socket
      |> assign(:vacancy, vacancy)
      |> put_flash(:info, "Saved")
-     |> push_patch(to: ~p"/admin/jobs/#{vacancy.id}/edit?section=#{current_step.next}")}
+     |> push_patch(to: ~p"/admin/jobs/#{vacancy.id}/edit?page=#{current_step.next}")}
   end
 
-  defp apply_action(socket, :edit, %{"id" => id, "section" => section}) do
+  defp apply_action(socket, :edit, %{"id" => id, "page" => page}) do
     socket
     |> assign(:page_title, "Edit Job Vacancy")
-    |> assign(:step_name, section)
+    |> assign(:step_name, page)
     |> assign_new(:vacancy, fn -> Vacancies.get_job_vacancy(id) end)
   end
 

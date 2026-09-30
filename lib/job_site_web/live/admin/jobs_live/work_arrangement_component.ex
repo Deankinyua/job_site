@@ -41,7 +41,7 @@ defmodule JobSiteWeb.Admin.JobsLive.WorkArrangementComponent do
         <div class="flex justify-between border-t border-slate-700 pt-5">
           <JobVacancyComponents.back_button
             id="work-arrangement-back"
-            previous_page_url={~p"/admin/jobs/#{@vacancy.id}/edit/?section=job_description"}
+            previous_page_url={~p"/admin/jobs/#{@vacancy.id}/edit/?page=job_description"}
           />
           <JobVacancyComponents.next_button id="work-arrangement-next" />
         </div>

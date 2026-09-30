@@ -81,7 +81,7 @@ defmodule JobSiteWeb.Admin.JobsLive.ReviewSubmitComponent do
       <div class="flex justify-between border-t border-slate-700 pt-5">
         <JobVacancyComponents.back_button
           id="review-submit-back"
-          previous_page_url={~p"/admin/jobs/#{@vacancy.id}/edit/?section=compensation"}
+          previous_page_url={~p"/admin/jobs/#{@vacancy.id}/edit/?page=compensation"}
         />
         <button
           id="review-submit-button"
@@ -111,7 +111,7 @@ defmodule JobSiteWeb.Admin.JobsLive.ReviewSubmitComponent do
            :error,
            "Please go back and submit all the required information to create a job vacancy"
          )
-         |> push_navigate(to: ~p"/admin/jobs/#{vacancy.id}/edit?section=review_and_submit")}
+         |> push_navigate(to: ~p"/admin/jobs/#{vacancy.id}/edit?page=review_and_submit")}
     end
   end
 end
