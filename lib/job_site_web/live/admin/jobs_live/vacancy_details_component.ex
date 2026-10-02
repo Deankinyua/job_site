@@ -122,7 +122,7 @@ defmodule JobSiteWeb.Admin.JobsLive.VacancyDetailsComponent do
     case Vacancies.save_job_vacancy(changeset) do
       {:ok, vacancy} ->
         if action == :new,
-          do: send(self(), {:second_step, vacancy, step}),
+          do: send(self(), {:new_job_vacancy, vacancy, step}),
           else: Helpers.next_step(vacancy, step)
 
         {:noreply, socket}

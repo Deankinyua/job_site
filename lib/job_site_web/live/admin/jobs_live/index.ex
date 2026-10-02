@@ -43,7 +43,7 @@ defmodule JobSiteWeb.Admin.JobsLive.Index do
   end
 
   @impl Phoenix.LiveView
-  def handle_info({:second_step, vacancy, current_step}, socket) do
+  def handle_info({:new_job_vacancy, vacancy, current_step}, socket) do
     {:noreply,
      socket
      |> put_flash(:info, "Saved")
